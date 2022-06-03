@@ -1,42 +1,54 @@
-from cardhand import *
-from random import *
+from card import *
+from cardhand import CardHand
 
 class Deck(CardHand):
     def __init__(self):
         self.hand = []
-        self.index = 0
         for suit in SUITS:
             for value in VALUES:
-                self.hand.append(Card(value, suit))
+                c = Card(value, suit)
+                self.hand.append(c)
     
+    def get_deck(self):
+        return self.hand
+
     def shuffle(self):
-        shuffle(self.hand)
-    
-    def pop(self):
-        top = self.hand.pop()
-        return top
+        random.shuffle(self.hand)
 
-    def deal(self, n, player_hand):
+    def draw_card(self):
+        top_card = self.hand.pop()
+        return top_card
+
+    def draw_cards(self, hand, n):
         for i in range(n):
-            top = self.pop()
-            player_hand.add_card(top)
-        
-
+            hand.add_to_hand(self.hand.pop())
+    
+    def __str__(self):
+        d = ""
+        for card in self:
+            d += Card.__str__(card) + ","
+        return d
+            
 if __name__ == '__main__':
-    d = Deck()
-    d.shuffle()
-    print("------")
-    for i in range(3):
-        print(d.pop())
-    p = CardHand([])
-    print(id(p.hand))
-    d.deal(2, p)
-    print("---")
-    print(p)
-    e = CardHand([])
-    print(id(e.hand))
-    print(len(e))
-    d.deal(2, e)
-    print("---")
-    print(e)
-    print(len(e))
+    deck = Deck()
+    deck.shuffle()
+    print(deck)
+
+    for card in deck:
+        print(card)
+
+    print("----")
+    hand = []
+    second_hand = []
+    for i in range(5):
+        hand.append(deck.draw_card())
+    for card in hand:
+        print(card)
+    print("--------------")
+    for j in range(6):
+        second_hand.append(deck.draw_card())
+    for card in second_hand:
+        print(card)
+    print("--------------------")
+    for card in deck.get_deck():
+        print(card)
